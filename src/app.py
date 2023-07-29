@@ -54,6 +54,37 @@ def sitemap():
         return generate_sitemap(app)
     return send_from_directory(static_file_dir, 'index.html')
 
+@app.route('/signup', methods=['POST'])
+def create_user():
+    data = request.get_json(),
+    email = data.get('email'),
+    password = data.get('password')
+
+    user = User.query.filter_by(email = email).first()
+        if user: 
+            return jsonify({"message" = "El usuario ya existe"}), 400
+        
+        hashed_password = generate_password_hash(data['password'], method='sha256')
+
+        new_user = user(email=email, password=hashed_password)
+
+    db.session.add(new_user),
+    db.session.commit()
+
+    return jsonify({"message"= "Registro exitoso"})
+    # return jsonify(aut_token = aut_token)
+
+
+
+
+
+
+
+
+
+
+
+
 # any other endpoint will try to serve it like a static file
 @app.route('/<path:path>', methods=['GET'])
 def serve_any_other_file(path):
