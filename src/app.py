@@ -61,9 +61,10 @@ def create_user():
     password = data.get('password')
 
     user = User.query.filter_by(email = email).first()
-        if user: 
-            return jsonify({"message" = "El usuario ya existe"}), 400
-        
+    if user: 
+        return jsonify({"message" : "El usuario ya existe"}), 400
+
+               
         hashed_password = generate_password_hash(data['password'], method='sha256')
 
         new_user = user(email=email, password=hashed_password)
@@ -71,19 +72,8 @@ def create_user():
     db.session.add(new_user),
     db.session.commit()
 
-    return jsonify({"message"= "Registro exitoso"})
+    return jsonify({"message" : "Registro exitoso"})
     # return jsonify(aut_token = aut_token)
-
-
-
-
-
-
-
-
-
-
-
 
 # any other endpoint will try to serve it like a static file
 @app.route('/<path:path>', methods=['GET'])
